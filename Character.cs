@@ -1,4 +1,4 @@
-namespace SimpleGame
+namespace InventoryGame
 {
     public class Character
     {
@@ -13,14 +13,5 @@ namespace SimpleGame
             int weaponDamage = Equipment.Weapon?.Damage ?? 0;
             return baseDamage + weaponDamage;
         }
-
-        public void ViewCharacterStats()
-        {
-            Console.WriteLine($"=== {Name} ===");
-            Console.WriteLine($"Level: {Level}");
-            Console.WriteLine($"Damage: {CalculateTotalDamage()}");
-            Console.WriteLine($"Inventory: {Inventory.UsedSlots}/{Inventory.Capacity}");
-        }
-
     }
 }

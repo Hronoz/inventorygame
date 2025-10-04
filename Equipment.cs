@@ -1,4 +1,4 @@
-namespace SimpleGame
+namespace InventoryGame
 {
     public class Equipment
     {
@@ -13,15 +13,6 @@ namespace SimpleGame
         public Item? Weapon => Slots[ItemType.Weapon];
         public int Capacity => Slots.Count;
 
-        public void DisplayEquipment()
-        {
-            Console.WriteLine("=== EQUIPPED ITEMS ===");
-            foreach (var slot in Slots)
-            {
-                string itemName = slot.Value?.Name ?? "[Empty]";
-                Console.WriteLine($"{slot.Key}: {itemName}");
-            }
-        }
         // public IReadOnlyDictionary<ItemType, Item?> Slots => _slots.AsReadOnly();
         // public int Capacity => _slots.Count;
         // public Item Armor => _slots[ItemType.Armor];

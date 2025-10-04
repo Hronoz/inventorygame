@@ -1,4 +1,4 @@
-namespace SimpleGame
+namespace InventoryGame
 {
     public class Inventory
     {
