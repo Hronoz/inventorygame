@@ -23,7 +23,9 @@ namespace InventoryGame
 
         public Item Unequip(ItemType itemType)
         {
-            return Slots[itemType] ?? new Item();
+            Item? item = Slots[itemType];
+            Slots[itemType] = null;
+            return item ?? new Item();
         }
 
         // public IReadOnlyDictionary<ItemType, Item?> Slots => _slots.AsReadOnly();

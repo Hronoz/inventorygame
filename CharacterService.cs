@@ -18,6 +18,7 @@ namespace InventoryGame
             {
                 return;
             }
+
             Character.Inventory.AddItem(item);
         }
 
@@ -27,16 +28,19 @@ namespace InventoryGame
             {
                 return;
             }
+
             Character.Equipment.Equip(item);
         }
+
         public void UnequipItem(ItemType slotType)
         {
             if (Character is null)
             {
                 return;
             }
-            Character.Equipment.Unequip(slotType);
-        }
 
+            Item unequippedItem = Character.Equipment.Unequip(slotType);
+            Character.Inventory.AddItem(unequippedItem);
+        }
     }
 }
