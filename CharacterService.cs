@@ -29,7 +29,7 @@ namespace InventoryGame
                 return;
             }
 
-            Character.Equipment.Equip(item);
+            Character.EquipItem(item);
         }
 
         public void UnequipItem(ItemType slotType)
@@ -39,8 +39,7 @@ namespace InventoryGame
                 return;
             }
 
-            Item unequippedItem = Character.Equipment.Unequip(slotType);
-            Character.Inventory.AddItem(unequippedItem);
+            Character.UnequipItem(slotType);
         }
     }
 }

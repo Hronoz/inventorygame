@@ -13,5 +13,31 @@ namespace InventoryGame
             int weaponDamage = Equipment.Weapon?.Damage ?? 0;
             return baseDamage + weaponDamage;
         }
+
+        public void EquipItem(Item item)
+        {
+            ItemType slotType = item.Type;
+            if (Equipment.Slots.ContainsKey(slotType))
+            {
+                if (Equipment.Slots[slotType] is not null)
+                {
+                    UnequipItem(slotType);
+                }
+                Equipment.Slots[slotType] = item;
+            }
+        }
+
+        public void UnequipItem(ItemType itemType)
+        {
+            if (Inventory.UsedSlots >= Inventory.Capacity)
+            {
+                return;
+            }
+            Item? item = Equipment.Slots[itemType];
+            if (Inventory.AddItem(item))
+            {
+                Equipment.Slots[itemType] = null;
+            }
+        }
     }
 }
