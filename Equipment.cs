@@ -13,6 +13,19 @@ namespace InventoryGame
         public Item? Weapon => Slots[ItemType.Weapon];
         public int Capacity => Slots.Count;
 
+        public void Equip(Item item)
+        {
+            if (Slots.ContainsKey(item.Type))
+            {
+                Slots[item.Type] = item;
+            }
+        }
+
+        public Item Unequip(ItemType itemType)
+        {
+            return Slots[itemType] ?? new Item();
+        }
+
         // public IReadOnlyDictionary<ItemType, Item?> Slots => _slots.AsReadOnly();
         // public int Capacity => _slots.Count;
         // public Item Armor => _slots[ItemType.Armor];
