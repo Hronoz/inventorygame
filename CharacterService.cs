@@ -12,6 +12,11 @@ namespace InventoryGame
             };
         }
 
+        public Character GetCharacter(string name)
+        {
+            return Character;
+        }
+
         public void GiveItem(Item item)
         {
             if (Character is null)

@@ -12,5 +12,21 @@ namespace InventoryGame.Controllers
         {
             _characterService = characterService;
         }
+
+        [HttpGet("{name}")]
+        public ActionResult GetCharacter(string name)
+        {
+            _characterService.GetCharacter(name);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult CreateCharacter(Character character)
+        {
+            _characterService.CreateCharacter(character.Name);
+
+            return CreatedAtAction(nameof(GetCharacter), new { name = character.Name }, character);
+        }
     }
 }
