@@ -2,10 +2,10 @@ namespace InventoryGame
 {
     public interface ICharacterService
     {
-        void CreateCharacter(string name);
-        Character GetCharacter(string name);
-        void GiveItem(Item item);
-        void EquipItem(Item item);
-        void UnequipItem(ItemType slotType);
+        void CreateCharacter(Character character);
+        Character GetCharacter(int id);
+        void GiveItem(int id, Item item);
+        void EquipItem(int id, Item item);
+        void UnequipItem(int id, ItemType slotType);
     }
 }

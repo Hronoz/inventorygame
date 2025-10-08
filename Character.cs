@@ -2,6 +2,7 @@ namespace InventoryGame
 {
     public class Character
     {
+        public int Id { get; set; }
         public string Name { get; set; } = "Hero";
         public int Level { get; set; } = 1;
         public Inventory Inventory { get; set; } = new Inventory();

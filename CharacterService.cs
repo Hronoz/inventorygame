@@ -1,50 +1,60 @@
+using System.Diagnostics.Tracing;
+
 namespace InventoryGame
 {
     public class CharacterService : ICharacterService
     {
-        public Character? Character { get; set; }
+        private readonly List<Character> _characters = new();
 
-        public void CreateCharacter(string name)
+        public void CreateCharacter(Character character)
         {
-            Character = new Character
-            {
-                Name = name
-            };
-        }
-
-        public Character GetCharacter(string name)
-        {
-            return Character;
-        }
-
-        public void GiveItem(Item item)
-        {
-            if (Character is null)
+            if (_characters.Any(ch => ch.Id == character.Id))
             {
                 return;
             }
 
-            Character.Inventory.AddItem(item);
+            _characters.Add(character);
         }
 
-        public void EquipItem(Item item)
+        public Character GetCharacter(int id)
         {
-            if (Character is null)
+            Character character = _characters.Find(ch => ch.Id == id);
+
+            return character;
+        }
+
+        public void GiveItem(int id, Item item)
+        {
+            Character character = GetCharacter(id);
+
+            if (character is null)
             {
                 return;
             }
 
-            Character.EquipItem(item);
+            character.Inventory.AddItem(item);
         }
 
-        public void UnequipItem(ItemType slotType)
+        public void EquipItem(int id, Item item)
         {
-            if (Character is null)
+            Character character = GetCharacter(id);
+            if (character is null)
             {
                 return;
             }
 
-            Character.UnequipItem(slotType);
+            character.EquipItem(item);
+        }
+
+        public void UnequipItem(int id, ItemType slotType)
+        {
+            Character character = GetCharacter(id);
+            if (character is null)
+            {
+                return;
+            }
+
+            character.UnequipItem(slotType);
         }
     }
 }
