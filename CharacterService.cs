@@ -1,4 +1,4 @@
-using System.Diagnostics.Tracing;
+using InventoryGame.Exceptions;
 
 namespace InventoryGame
 {
@@ -18,7 +18,12 @@ namespace InventoryGame
 
         public Character GetCharacter(int id)
         {
-            Character character = _characters.Find(ch => ch.Id == id);
+            Character? character = _characters.Find(ch => ch.Id == id);
+
+            if (character is null)
+            {
+                throw new CharacterNotFoundException(id);
+            }
 
             return character;
         }
@@ -27,20 +32,16 @@ namespace InventoryGame
         {
             Character character = GetCharacter(id);
 
-            if (character is null)
-            {
-                return;
-            }
-
             character.Inventory.AddItem(item);
         }
 
         public void EquipItem(int id, Item item)
         {
             Character character = GetCharacter(id);
-            if (character is null)
+
+            if (!character.Inventory.Items.Any(i => i.Item == item))
             {
-                return;
+                throw new ItemNotOwnedException(id, item.Id);
             }
 
             character.EquipItem(item);
@@ -49,9 +50,10 @@ namespace InventoryGame
         public void UnequipItem(int id, ItemType slotType)
         {
             Character character = GetCharacter(id);
-            if (character is null)
+
+            if (character.Inventory.IsFull)
             {
-                return;
+                throw new InventoryIsFullException(id);
             }
 
             character.UnequipItem(slotType);

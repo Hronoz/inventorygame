@@ -1,10 +1,15 @@
+using System.Collections;
+
 namespace InventoryGame
 {
     public class Inventory
     {
-        private List<InventorySlot> _slots = new List<InventorySlot>();
+        private readonly List<InventorySlot> _items = new List<InventorySlot>();
+        public IList<InventorySlot> Items => _items.AsReadOnly();
+
         public int Capacity { get; set; } = 20;
-        public int UsedSlots => _slots.Count;
+        public int UsedSlots => _items.Count;
+        public bool IsFull => Capacity <= UsedSlots;
 
         /// <summary>
         /// Adds item to inventory if inventory is not full
@@ -16,13 +21,13 @@ namespace InventoryGame
         {
             if (UsedSlots < Capacity)
             {
-                _slots.Add(new InventorySlot { Item = item, Quantity = quantity });
+                _items.Add(new InventorySlot { Item = item, Quantity = quantity });
                 return true;
             }
             return false;
         }
+
         public void RemoveItem(int itemId, int quantity = 1) { }
-        public void ViewInventory() { }
     }
 
     public class InventorySlot

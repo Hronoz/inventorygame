@@ -1,3 +1,4 @@
+using InventoryGame.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryGame.Controllers
@@ -45,9 +46,28 @@ namespace InventoryGame.Controllers
         [HttpPost("equip/{id}")]
         public ActionResult EquipItem(int id, Item item)
         {
-            _characterService.EquipItem(id, item);
-
-            return Ok();
+            try
+            {
+                _characterService.EquipItem(id, item);
+                return Ok(new { message = $"{item.Name} equipped successfully." });
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (ItemNotOwnedException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (InventoryIsFullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Fallback for unexpected errors
+                return StatusCode(500, new { error = "An unexpected error occurred.", details = ex.Message });
+            }
         }
 
         [HttpPost("unequip/{id}")]
