@@ -1,3 +1,5 @@
+using InventoryGame.Exceptions;
+
 namespace InventoryGame
 {
     public class Character
@@ -17,6 +19,11 @@ namespace InventoryGame
 
         public void EquipItem(Item item)
         {
+            if (Inventory.IsFull)
+            {
+                throw new InventoryIsFullException(Id);
+            }
+
             ItemType slotType = item.Type;
             if (Equipment.Slots.ContainsKey(slotType))
             {
@@ -30,14 +37,20 @@ namespace InventoryGame
 
         public void UnequipItem(ItemType itemType)
         {
-            if (Inventory.UsedSlots >= Inventory.Capacity)
+            if (Inventory.IsFull)
             {
-                return;
+                throw new InventoryIsFullException(Id);
             }
+
             Item? item = Equipment.Slots[itemType];
-            if (Inventory.AddItem(item))
+            try
+            {
+                Inventory.AddItem(item);
+            }
+            catch (InventoryIsFullException)
             {
                 Equipment.Slots[itemType] = null;
+                throw new InventoryIsFullException(Id);
             }
         }
     }

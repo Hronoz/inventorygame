@@ -39,7 +39,8 @@ internal class Program
                     Instance = context.Request.Path
                 };
 
-                switch (exception) {
+                switch (exception)
+                {
                     case CharacterNotFoundException:
                         problem.Title = "Character not found";
                         break;
@@ -59,6 +60,11 @@ internal class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/openapi/v1.json", "v1");
+            });
         }
 
         app.UseHttpsRedirection();

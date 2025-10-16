@@ -4,8 +4,8 @@ namespace InventoryGame
     {
         void CreateCharacter(Character character);
         Character GetCharacter(int id);
-        void GiveItem(int id, Item item);
-        void EquipItem(int id, Item item);
-        void UnequipItem(int id, ItemType slotType);
+        void GiveItem(Character character, Item item);
+        void EquipItem(Character character, Item item);
+        void UnequipItem(Character character, ItemType slotType);
     }
 }

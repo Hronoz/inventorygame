@@ -19,7 +19,7 @@ namespace InventoryGame.Controllers
         {
             _characterService.CreateCharacter(character);
 
-            return CreatedAtAction(nameof(GetCharacter), new { name = character.Name }, character);
+            return CreatedAtAction(nameof(GetCharacter), new { id = character.Id }, character);
         }
 
         [HttpGet("{id}")]
@@ -35,27 +35,46 @@ namespace InventoryGame.Controllers
             return character;
         }
 
-        [HttpPost("item/{id}")]
-        public ActionResult GiveItem(int id, Item item)
+        [HttpPost("{characterId}/items")]
+        public ActionResult GiveItem(int characterId, int itemId)
         {
-            _characterService.GiveItem(id, item);
+            Character character = _characterService.GetCharacter(characterId);
+            Item? item = character.Inventory.Items.FirstOrDefault(i => i.Item.Id == itemId)?.Item;
 
-            return NotFound();
+            if (item is null)
+            {
+                throw new ItemNotOwnedException(characterId, itemId);
+            }
+
+            _characterService.GiveItem(character, item);
+
+            return Ok(character);
         }
 
-        [HttpPost("equip/{id}")]
-        public ActionResult EquipItem(int id, Item item)
+        [HttpPost("{characterId}/equipment")]
+        public ActionResult EquipItem(int characterId, int itemId)
         {
-            _characterService.EquipItem(id, item);
+            Character character = _characterService.GetCharacter(characterId);
+            Item? item = character.Inventory.Items.FirstOrDefault(i => i.Item.Id == itemId)?.Item;
+
+            if (item is null)
+            {
+                throw new ItemNotOwnedException(characterId, itemId);
+            }
+
+            _characterService.EquipItem(character, item);
+
             return Ok(new { message = $"{item.Name} equipped successfully." });
         }
 
-        [HttpPost("unequip/{id}")]
-        public ActionResult UnequipItem(int id, ItemType slotType)
+        [HttpPost("{characterId}/equipment/{slotType}")]
+        public ActionResult UnequipItem(int characterId, ItemType slotType)
         {
-            _characterService.UnequipItem(id, slotType);
+            Character character = _characterService.GetCharacter(characterId);
 
-            return Ok();
+            _characterService.UnequipItem(character, slotType);
+
+            return Ok(new { message = $"{slotType} unequipped successfully" });
         }
     }
 }

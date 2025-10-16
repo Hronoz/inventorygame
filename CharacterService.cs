@@ -18,7 +18,7 @@ namespace InventoryGame
 
         public Character GetCharacter(int id)
         {
-            Character? character = _characters.Find(ch => ch.Id == id);
+            Character? character = _characters.FirstOrDefault(ch => ch.Id == id);
 
             if (character is null)
             {
@@ -28,34 +28,26 @@ namespace InventoryGame
             return character;
         }
 
-        public void GiveItem(int id, Item item)
+        public void GiveItem(Character character, Item item)
         {
-            Character character = GetCharacter(id);
+            try
+            {
 
-            character.Inventory.AddItem(item);
+                character.Inventory.AddItem(item);
+            }
+            catch (InventoryIsFullException)
+            {
+                throw new InventoryIsFullException(character.Id);
+            }
         }
 
-        public void EquipItem(int id, Item item)
+        public void EquipItem(Character character, Item item)
         {
-            Character character = GetCharacter(id);
-
-            if (!character.Inventory.Items.Any(i => i.Item == item))
-            {
-                throw new ItemNotOwnedException(id, item.Id);
-            }
-
             character.EquipItem(item);
         }
 
-        public void UnequipItem(int id, ItemType slotType)
+        public void UnequipItem(Character character, ItemType slotType)
         {
-            Character character = GetCharacter(id);
-
-            if (character.Inventory.IsFull)
-            {
-                throw new InventoryIsFullException(id);
-            }
-
             character.UnequipItem(slotType);
         }
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+using InventoryGame.Exceptions;
 
 namespace InventoryGame
 {
@@ -11,23 +11,22 @@ namespace InventoryGame
         public int UsedSlots => _items.Count;
         public bool IsFull => Capacity <= UsedSlots;
 
-        /// <summary>
-        /// Adds item to inventory if inventory is not full
-        /// </summary>
-        /// <param name="item">Item that is to be added</param>
-        /// <param name="quantity">Quantity of items that is to be added</param>
-        /// <returns>true it item is added, false if not</returns>
-        public bool AddItem(Item item, int quantity = 1)
+        public void AddItem(Item item, int quantity = 1)
         {
-            if (UsedSlots < Capacity)
+            if (IsFull)
             {
-                _items.Add(new InventorySlot { Item = item, Quantity = quantity });
-                return true;
+                throw new InventoryIsFullException();
             }
-            return false;
+
+            _items.Add(new InventorySlot { Item = item, Quantity = quantity });
         }
 
-        public void RemoveItem(int itemId, int quantity = 1) { }
+        public void RemoveItem(Item item)
+        {
+            InventorySlot slot = _items.FirstOrDefault(i => i.Item == item);
+
+            _items.Remove(slot);
+        }
     }
 
     public class InventorySlot
