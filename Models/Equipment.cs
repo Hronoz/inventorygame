@@ -1,4 +1,4 @@
-namespace InventoryGame
+namespace InventoryGame.Models
 {
     public class Equipment
     {

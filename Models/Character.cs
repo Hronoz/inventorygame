@@ -1,6 +1,4 @@
-using InventoryGame.Exceptions;
-
-namespace InventoryGame
+namespace InventoryGame.Models
 {
     public class Character
     {

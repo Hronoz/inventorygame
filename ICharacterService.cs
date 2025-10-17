@@ -1,3 +1,5 @@
+using InventoryGame.Models;
+
 namespace InventoryGame
 {
     public interface ICharacterService

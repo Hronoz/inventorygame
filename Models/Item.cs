@@ -1,4 +1,4 @@
-namespace InventoryGame
+namespace InventoryGame.Models
 {
     public enum ItemType { Weapon, Armor, Consumable, Material }
     public enum ItemRarity { Common, Uncommon, Rare, Epic, Legendary }

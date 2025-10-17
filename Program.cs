@@ -12,6 +12,8 @@ internal class Program
         builder.Services.AddSingleton<ICharacterService, CharacterService>();
         builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 
+        builder.Services.AddAutoMapper(typeof(MappingProfile));
+
         builder.Services.AddOpenApi();
 
         builder.Services.AddControllers();

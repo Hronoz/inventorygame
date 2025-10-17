@@ -1,4 +1,5 @@
 using InventoryGame.Exceptions;
+using InventoryGame.Models;
 
 namespace InventoryGame
 {

@@ -1,3 +1,5 @@
+using AutoMapper;
+using InventoryGame.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryGame.Controllers
@@ -7,22 +9,24 @@ namespace InventoryGame.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IItemRepository _itemRepository;
+        private readonly IMapper _mapper;
 
-        public ItemsController(IItemRepository itemRepository)
+        public ItemsController(IItemRepository itemRepository, IMapper mapper)
         {
             _itemRepository = itemRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<List<Item>> GetItems()
+        public ActionResult<IEnumerable<ItemDto>> GetItems()
         {
-            return _itemRepository.GetAllItems().ToList();
+            return _mapper.Map<List<ItemDto>>(_itemRepository.GetAllItems());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Item> GetItem(int id)
+        public ActionResult<ItemDto> GetItem(int id)
         {
-            return _itemRepository.GetItem(id);
+            return _mapper.Map<ItemDto>(_itemRepository.GetItem(id));
         }
     }
 }

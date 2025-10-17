@@ -1,5 +1,7 @@
+using AutoMapper;
 using InventoryGame.DTOs;
 using InventoryGame.Exceptions;
+using InventoryGame.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryGame.Controllers
@@ -10,11 +12,13 @@ namespace InventoryGame.Controllers
     {
         private readonly ICharacterService _characterService;
         private readonly IItemRepository _itemRepository;
+        private readonly IMapper _mapper;
 
-        public CharactersController(ICharacterService characterService, IItemRepository itemRepository)
+        public CharactersController(ICharacterService characterService, IItemRepository itemRepository, IMapper mapper)
         {
             _characterService = characterService;
             _itemRepository = itemRepository;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -35,31 +39,17 @@ namespace InventoryGame.Controllers
                 return NotFound();
             }
 
-            var characterDto = new CharacterDto
-            {
-                Name = character.Name,
-                Id = character.Id,
-            };
-
-            return characterDto;
+            return _mapper.Map<CharacterDto>(character);
         }
 
         [HttpGet("{characterId}/inventory")]
-        public ActionResult<List<InventorySlotDto>> GetItemsInInventory(int characterId)
+        public ActionResult<IEnumerable<InventorySlotDto>> GetItemsInInventory(int characterId)
         {
             Character character = _characterService.GetCharacter(characterId);
 
-            var inventoryDto = character.Inventory.Items
-                .Select(slot => new InventorySlotDto
-                {
-                    ItemId = slot.Item.Id,
-                    Type = slot.Item.Type,
-                    Quantity = slot.Quantity,
-                    Name = slot.Item.Name,
-                })
-                .ToList();
+            var inventoryDto = _mapper.Map<IEnumerable<InventorySlotDto>>(character.Inventory.Items);
 
-            return inventoryDto;
+            return Ok(inventoryDto);
         }
 
         [HttpPost("{characterId}/inventory/{itemId}")]
@@ -74,11 +64,11 @@ namespace InventoryGame.Controllers
         }
 
         [HttpGet("{characterId}/equipment")]
-        public ActionResult<Dictionary<ItemType, Item?>> GetEquipment(int characterId)
+        public ActionResult<EquipmentDto> GetEquipment(int characterId)
         {
             Character character = _characterService.GetCharacter(characterId);
 
-            return character.Equipment.Slots;
+            return _mapper.Map<EquipmentDto>(character.Equipment.Slots);
         }
 
         [HttpPost("{characterId}/equipment/{itemId}")]
