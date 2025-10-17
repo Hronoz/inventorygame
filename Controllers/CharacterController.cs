@@ -5,12 +5,12 @@ namespace InventoryGame.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CharacterController : ControllerBase
+    public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
         private readonly IItemRepository _itemRepository;
 
-        public CharacterController(ICharacterService characterService, IItemRepository itemRepository)
+        public CharactersController(ICharacterService characterService, IItemRepository itemRepository)
         {
             _characterService = characterService;
             _itemRepository = itemRepository;
@@ -37,6 +37,14 @@ namespace InventoryGame.Controllers
             return character;
         }
 
+        [HttpGet("{characterId}/inventory")]
+        public ActionResult<List<InventorySlot>> GetItemsInInventory(int characterId)
+        {
+            Character character = _characterService.GetCharacter(characterId);
+
+            return character.Inventory.Items.ToList();
+        }
+
         [HttpPost("{characterId}/inventory/{itemId}")]
         public ActionResult GiveItem(int characterId, int itemId)
         {
@@ -46,6 +54,14 @@ namespace InventoryGame.Controllers
             _characterService.GiveItem(character, item);
 
             return Ok(character);
+        }
+
+        [HttpGet("{characterId}/equipment")]
+        public ActionResult<Dictionary<ItemType, Item?>> GetEquipment(int characterId)
+        {
+            Character character = _characterService.GetCharacter(characterId);
+
+            return character.Equipment.Slots;
         }
 
         [HttpPost("{characterId}/equipment/{itemId}")]

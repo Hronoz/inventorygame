@@ -27,6 +27,7 @@ namespace InventoryGame
                     UnequipItem(slotType);
                 }
                 Equipment.Slots[slotType] = item;
+                Inventory.RemoveItem(item);
             }
         }
 
