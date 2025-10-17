@@ -8,10 +8,12 @@ namespace InventoryGame.Controllers
     public class CharacterController : ControllerBase
     {
         private readonly ICharacterService _characterService;
+        private readonly IItemRepository _itemRepository;
 
-        public CharacterController(ICharacterService characterService)
+        public CharacterController(ICharacterService characterService, IItemRepository itemRepository)
         {
             _characterService = characterService;
+            _itemRepository = itemRepository;
         }
 
         [HttpPost]
@@ -39,12 +41,7 @@ namespace InventoryGame.Controllers
         public ActionResult GiveItem(int characterId, int itemId)
         {
             Character character = _characterService.GetCharacter(characterId);
-            Item? item = character.Inventory.Items.FirstOrDefault(i => i.Item.Id == itemId)?.Item;
-
-            if (item is null)
-            {
-                throw new ItemNotOwnedException(characterId, itemId);
-            }
+            Item item = _itemRepository.GetItem(itemId);
 
             _characterService.GiveItem(character, item);
 
@@ -64,7 +61,7 @@ namespace InventoryGame.Controllers
 
             _characterService.EquipItem(character, item);
 
-            return Ok(new { message = $"{item.Name} equipped successfully." });
+            return Ok(new { message = $"Item {itemId} equipped successfully." });
         }
 
         [HttpDelete("{characterId}/equipment/{slotType}")]

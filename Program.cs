@@ -10,6 +10,7 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddSingleton<ICharacterService, CharacterService>();
+        builder.Services.AddSingleton<IItemRepository, ItemRepository>();
 
         builder.Services.AddOpenApi();
 
