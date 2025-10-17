@@ -35,7 +35,7 @@ namespace InventoryGame.Controllers
             return character;
         }
 
-        [HttpPost("{characterId}/items")]
+        [HttpPost("{characterId}/inventory/{itemId}")]
         public ActionResult GiveItem(int characterId, int itemId)
         {
             Character character = _characterService.GetCharacter(characterId);
@@ -51,7 +51,7 @@ namespace InventoryGame.Controllers
             return Ok(character);
         }
 
-        [HttpPost("{characterId}/equipment")]
+        [HttpPost("{characterId}/equipment/{itemId}")]
         public ActionResult EquipItem(int characterId, int itemId)
         {
             Character character = _characterService.GetCharacter(characterId);
@@ -67,7 +67,7 @@ namespace InventoryGame.Controllers
             return Ok(new { message = $"{item.Name} equipped successfully." });
         }
 
-        [HttpPost("{characterId}/equipment/{slotType}")]
+        [HttpDelete("{characterId}/equipment/{slotType}")]
         public ActionResult UnequipItem(int characterId, ItemType slotType)
         {
             Character character = _characterService.GetCharacter(characterId);
