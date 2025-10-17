@@ -1,3 +1,4 @@
+using InventoryGame.DTOs;
 using InventoryGame.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace InventoryGame.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Character> GetCharacter(int id)
+        public ActionResult<CharacterDto> GetCharacter(int id)
         {
             Character character = _characterService.GetCharacter(id);
 
@@ -34,15 +35,31 @@ namespace InventoryGame.Controllers
                 return NotFound();
             }
 
-            return character;
+            var characterDto = new CharacterDto
+            {
+                Name = character.Name,
+                Id = character.Id,
+            };
+
+            return characterDto;
         }
 
         [HttpGet("{characterId}/inventory")]
-        public ActionResult<List<InventorySlot>> GetItemsInInventory(int characterId)
+        public ActionResult<List<InventorySlotDto>> GetItemsInInventory(int characterId)
         {
             Character character = _characterService.GetCharacter(characterId);
 
-            return character.Inventory.Items.ToList();
+            var inventoryDto = character.Inventory.Items
+                .Select(slot => new InventorySlotDto
+                {
+                    ItemId = slot.Item.Id,
+                    Type = slot.Item.Type,
+                    Quantity = slot.Quantity,
+                    Name = slot.Item.Name,
+                })
+                .ToList();
+
+            return inventoryDto;
         }
 
         [HttpPost("{characterId}/inventory/{itemId}")]
